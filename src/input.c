@@ -10,63 +10,69 @@
 #include "packing.h"
 #include "retcodes.h"
 
-int input_data(table *data) {
+int fill_table(table *data) {
     if (!data) {
         return ARG_ERR;
     }
-    fprintf(stdout, "Input count of records: ");
     int count = 0;
+    fprintf(stdout, "Input count of records: ");
     if (fscanf(stdin, "%d", &count) != 1 || count < 1) {
         return INPUT_ERR;
     }
     clean_buf();
-    data->list = calloc(count, sizeof(container *));
-    if (!data->list) {
+    int rc = EXIT_SUCCESS;
+
+    rc = init_table(data, count);
+    if (rc) {
         return ALLOC_ERR;
     }
+    for (size_t i = 0; i < count; i++) {
+        rc = fill_container(data->list + i);
+        if (rc) {
+            free_table(data);
+            return ALLOC_ERR;
+        }
+        data->size++;
+    }
+    fprintf(stdout, "Successful input data\n");
+
+    return EXIT_SUCCESS;
+}
+
+int fill_container(container **dest_ptr) {
+    if (!dest_ptr) {
+        return ARG_ERR;
+    }
+
     size_t len = 0;
     char *tmp = NULL;
     int weight = 0;
     int capacity = 0;
 
-    for (int i = 0; i < count; i++) {
-        fprintf(stdout, "Input type of container(string): ");
-        if (getline(&tmp, &len, stdin) == -1 || strlen(tmp) < 2) {
-            free(tmp);
-            free_list(data);
-            return INPUT_ERR;
-        }
-        tmp[strlen(tmp) - 1] = '\0';
-        fprintf(stdout, "Input weight of container: ");
-        if (fscanf(stdin, "%d", &weight) != 1) {
-            free(tmp);
-            free_list(data);
-            return INPUT_ERR;
-        }
-        clean_buf();
-        fprintf(stdout, "Input max_capacity of container: ");
-        if (fscanf(stdin, "%d", &capacity) != 1) {
-            free(tmp);
-            free_list(data);
-            return INPUT_ERR;
-        }
-        clean_buf();
-        data->list[i] = calloc(1, sizeof(container));
-        if (!data->list[i]) {
-            free(tmp);
-            free_list(data);
-            return ALLOC_ERR;
-        }
-        data->list[i]->type = tmp;
-        data->list[i]->weight = weight;
-        data->list[i]->max_capacity = capacity;
-
-        tmp = NULL;
-        len = 0;
+    fprintf(stdout, "Input type of container(string): ");
+    if (getline(&tmp, &len, stdin) == -1 || strlen(tmp) < 2) {
+        free(tmp);
+        return INPUT_ERR;
     }
-    data->size = count;
-    data->capacity = count;
-    fprintf(stdout, "Successful input data\n");
+    tmp[strlen(tmp) - 1] = '\0';
+    fprintf(stdout, "Input weight of container: ");
+    if (fscanf(stdin, "%d", &weight) != 1) {
+        free(tmp);
+        return INPUT_ERR;
+    }
+    clean_buf();
+    fprintf(stdout, "Input max_capacity of container: ");
+    if (fscanf(stdin, "%d", &capacity) != 1) {
+        free(tmp);
+        return INPUT_ERR;
+    }
+    clean_buf();
+    *dest_ptr = create_container(tmp, weight, capacity);
+    if (!(*dest_ptr)) {
+        free(tmp);
+        return ALLOC_ERR;
+    }
+
     return EXIT_SUCCESS;
 }
 
@@ -79,16 +85,6 @@ void output_data(table *data) {
         fprintf(stdout, "Type of container is %s\n", data->list[i]->type);
         fprintf(stdout, "Weight: %d\n", data->list[i]->weight);
         fprintf(stdout, "Max_capacity: %d\n", data->list[i]->max_capacity);
-    }
-}
-
-void free_list(table *data) {
-    if (!data) {
-        return;
-    }
-    for (int i = 0; i < data->capacity; i++) {
-        free(data->list[i]->type);
-        free(data->list[i]);
     }
 }
 

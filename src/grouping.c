@@ -11,39 +11,38 @@ int group_by_type(table *data, table *tb_group) {
     if (!data || !tb_group || !data->size) {
         return ARG_ERR;
     }
-    tb_group->list = calloc(data->size, sizeof(container *));
-    if (!tb_group->list) {
+    int rc = init_table(tb_group, data->size);
+    if (rc) {
         return ALLOC_ERR;
     }
-    tb_group->capacity = data->size;
     int pos = 0;
     for (int i = 0; i < data->size; i++) {
         pos = not_tb_group(tb_group, data->list[i]->type);
         if (pos == -1) {
-            tb_group->list[tb_group->size] = calloc(1, sizeof(container));
-            if (!tb_group->list[tb_group->size]) {
-                free_group(tb_group);
-                return ALLOC_ERR;
-            }
+
             char *str = strdup(data->list[i]->type);
             if (!str) {
-                free_group(tb_group);
+                free_table(tb_group);
                 return ALLOC_ERR;
             }
-            tb_group->list[tb_group->size]->type = str;
-            tb_group->list[tb_group->size]->weight = data->list[i]->weight;
-            tb_group->list[tb_group->size]->max_capacity = data->list[i]->max_capacity;
+
+            tb_group->list[tb_group->size] = create_container(str, data->list[i]->weight, data->list[i]->max_capacity);
+            if (!tb_group->list[tb_group->size]) {
+                free_group(tb_group);
+                free(str);
+                return ALLOC_ERR;
+            }
             tb_group->size++;
         } else {
             tb_group->list[pos]->weight += data->list[i]->weight;
             tb_group->list[pos]->max_capacity += data->list[i]->max_capacity;
         }
     }
-
-    int rc = sort_by_capacity(tb_group);
+    rc = sort_by_capacity(tb_group);
     if (rc) {
-        free_list(tb_group);
+        free_table(tb_group);
     }
+
     return rc;
 }
 
@@ -58,7 +57,7 @@ int sort_by_capacity(table *tb_group) {
     if (!tb_group) {
         return ARG_ERR;
     }
-    qsort(tb_group->list, tb_group->size, sizeof(container*), cmp);
+    qsort(tb_group->list, tb_group->size, sizeof(container *), cmp);
     return EXIT_SUCCESS;
 }
 
@@ -70,6 +69,7 @@ static int not_tb_group(table *tb_group, char *type) {
     }
     return -1;
 }
+
 void free_group(table *data) {
     for (int i = 0; i < data->size; i++) {
         free(data->list[i]->type);

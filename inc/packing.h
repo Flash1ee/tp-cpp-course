@@ -17,4 +17,12 @@ typedef struct {
     size_t capacity;
 } table;
 
+table *create_table();
+
+int init_table(table *tb, size_t size);
+
+void free_table(table *data);
+
+container *create_container(char *type, int weight, int capacity);
+
 #endif //HW_1_PACKING_H

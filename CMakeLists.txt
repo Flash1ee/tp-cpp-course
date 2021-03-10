@@ -8,4 +8,5 @@ include_directories(./inc/)
 add_executable(hw_1
         src/main.c
         src/input.c
-        src/grouping.c)
+        src/grouping.c
+        src/packing.c)

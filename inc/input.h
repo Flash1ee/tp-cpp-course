@@ -7,11 +7,11 @@
 
 #include "packing.h"
 
-int input_data(table *data);
+int fill_table(table *data);
 
 void output_data(table *data);
 
-void free_list(table *data);
+int fill_container(container **dest);
 
 void clean_buf();
 
