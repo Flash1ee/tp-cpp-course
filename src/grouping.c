@@ -15,9 +15,8 @@ int group_by_type(table *data, table *tb_group) {
     if (rc) {
         return ALLOC_ERR;
     }
-    int pos = 0;
-    for (int i = 0; i < data->size; i++) {
-        pos = not_tb_group(tb_group, data->list[i]->type);
+    for (size_t i = 0; i < data->size; i++) {
+        int pos = not_tb_group(tb_group, data->list[i]->type);
         if (pos == -1) {
             char *str = strdup(data->list[i]->type);
             if (!str) {

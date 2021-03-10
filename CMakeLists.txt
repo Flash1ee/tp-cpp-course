@@ -2,9 +2,19 @@ cmake_minimum_required(VERSION 3.16)
 project(hw_1)
 
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDART 11)
 set(CMAKE_C_FLAGS "-Wall -Wextra -g3 -ggdb")
-set(CMAKE_CXX_COMPILER "g++")
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake-modules")
+include(CodeCoverage)
+append_coverage_compiler_flags()
+
+setup_target_for_coverage_lcov(
+        NAME codeCoverage
+        EXECUTABLE unit.out
+        BASE_DIRECTORY "${PROJECT_SOURCE_DIR}"
+        EXCLUDE "src/packing.c"
+)
+
 
 include_directories(./inc/)
 
@@ -22,8 +32,10 @@ target_link_libraries(main.out WORK_LIB)
 enable_testing()
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
-message(${GTEST_INCLUDE_DIRS})
 add_executable(unit.out ${TESTS})
 target_include_directories(unit.out PUBLIC ./inc/)
 target_link_libraries(unit.out WORK_LIB ${GTEST_LIBRARIES} -lpthread)
+
+
+
 
