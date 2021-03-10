@@ -19,7 +19,6 @@ int group_by_type(table *data, table *tb_group) {
     for (int i = 0; i < data->size; i++) {
         pos = not_tb_group(tb_group, data->list[i]->type);
         if (pos == -1) {
-
             char *str = strdup(data->list[i]->type);
             if (!str) {
                 free_table(tb_group);
@@ -38,9 +37,11 @@ int group_by_type(table *data, table *tb_group) {
             tb_group->list[pos]->max_capacity += data->list[i]->max_capacity;
         }
     }
-    rc = sort_by_capacity(tb_group);
-    if (rc) {
-        free_table(tb_group);
+    if (data->size != tb_group->size) {
+        rc = sort_by_capacity(tb_group);
+        if (rc) {
+            free_table(tb_group);
+        }
     }
 
     return rc;

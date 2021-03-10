@@ -40,6 +40,9 @@ void free_table(table *data) {
 }
 
 container *create_container(char *type, int weight, int capacity) {
+    if (!type || weight < 0 || capacity < 0) {
+        return NULL;
+    }
     container *value = malloc(sizeof(container));
     if (value) {
         value->type = type;
@@ -47,4 +50,9 @@ container *create_container(char *type, int weight, int capacity) {
         value->max_capacity = capacity;
     }
     return value;
+}
+void free_container(container *source) {
+    if (source) {
+        free(source);
+    }
 }

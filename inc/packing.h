@@ -25,4 +25,6 @@ void free_table(table *data);
 
 container *create_container(char *type, int weight, int capacity);
 
+void free_container(container *source);
+
 #endif //HW_1_PACKING_H
