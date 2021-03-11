@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.13)
-project(hw_1)
-
 set(CMAKE_C_COMPILER "gcc")
 set(CMAKE_CC_COMPILER "gcc")
+
+project(hw_1)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS "-Wall -Wextra -g3 -ggdb")
