@@ -1,6 +1,3 @@
-//
-// Created by flashie on 06.03.2021.
-//
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -61,7 +58,7 @@ int sort_by_capacity(table *tb_group) {
     return EXIT_SUCCESS;
 }
 
-static int not_tb_group(table *tb_group, char *type) {
+int not_tb_group(table *tb_group, char *type) {
     for (size_t i = 0; i < tb_group->size; i++) {
         if (!strcmp(tb_group->list[i]->type, type)) {
             return i;

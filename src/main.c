@@ -1,6 +1,3 @@
-//
-// Created by flashie on 06.03.2021.
-//
 #include <stdlib.h>
 #include "packing.h"
 #include "retcodes.h"

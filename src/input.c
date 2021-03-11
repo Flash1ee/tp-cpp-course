@@ -1,6 +1,3 @@
-//
-// Created by flashie on 06.03.2021.
-//
 #define _GNU_SOURCE
 
 #include <stdio.h>

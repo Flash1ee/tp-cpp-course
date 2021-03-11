@@ -198,9 +198,6 @@ TEST(Grouping, group_with_sort_and_integration) {
     ASSERT_EQ(tb_group->list[0]->weight, tb->list[2]->weight);
     ASSERT_EQ(tb_group->list[0]->max_capacity, tb->list[2]->max_capacity);
 
-    output_data(tb);
-    output_data(tb_group);
-
     free_table(tb);
     free_table(tb_group);
 }
@@ -236,6 +233,7 @@ TEST(Grouping, group_with_sort_all_in_one) {
     table *tb_group = create_table();
     ASSERT_NE(tb_group, nullptr);
     rc = group_by_type(tb, tb_group);
+
     ASSERT_EQ(rc, EXIT_SUCCESS);
     EXPECT_EQ(tb_group->size, tb->size - 2);
     ASSERT_STREQ(tb_group->list[0]->type, tb->list[0]->type);

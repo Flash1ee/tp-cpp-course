@@ -35,7 +35,7 @@ build:
   artifacts:
     paths:
       - "build"
-      - "./cmake_modules"
+      - "./cmake-modules"
   needs: ["test_style"]
 
 unit_test:
