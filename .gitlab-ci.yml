@@ -4,7 +4,6 @@ before_script:
   - apt-get update --yes
   - apt-get install --yes cmake
   - apt-get install --yes libgtest-dev
-  - apt-get install --yes cppcheck
 
 variables:
   PROG: main.out
@@ -19,6 +18,7 @@ stages:
 test_style:
   stage: test_style
   script:
+    - apt-get install --yes cppcheck
     - ./cppcheck.sh
 
 build:
