@@ -15,7 +15,7 @@ setup_target_for_coverage_lcov(
         NAME codeCoverage
         EXECUTABLE unit.out
         BASE_DIRECTORY "${PROJECT_SOURCE_DIR}"
-        EXCLUDE "/usr/*"
+        EXCLUDE "/usr/*" "${PROJECT_SOURCE_DIR}/unit_tests/" "${PROJECT_SOURCE_DIR}/src/main.c"
 )
 
 
