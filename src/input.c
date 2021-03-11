@@ -26,7 +26,7 @@ int fill_table(table *data) {
     if (rc) {
         return ALLOC_ERR;
     }
-    for (size_t i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++) {
         rc = fill_container(data->list + i);
         if (rc) {
             free_table(data);
@@ -80,8 +80,8 @@ void output_data(table *data) {
     if (!data) {
         return;
     }
-    for (int i = 0; i < data->size; i++) {
-        fprintf(stdout, "Record %d\n", i);
+    for (size_t i = 0; i < data->size; i++) {
+        fprintf(stdout, "Record %zu\n", i);
         fprintf(stdout, "Type of container is %s\n", data->list[i]->type);
         fprintf(stdout, "Weight: %d\n", data->list[i]->weight);
         fprintf(stdout, "Max_capacity: %d\n", data->list[i]->max_capacity);

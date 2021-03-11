@@ -31,7 +31,7 @@ void free_table(table *data) {
     if (!data) {
         return;
     }
-    for (int i = 0; i < data->size; i++) {
+    for (size_t i = 0; i < data->size; i++) {
         free(data->list[i]->type);
         free(data->list[i]);
     }

@@ -62,7 +62,7 @@ int sort_by_capacity(table *tb_group) {
 }
 
 static int not_tb_group(table *tb_group, char *type) {
-    for (int i = 0; i < tb_group->size; i++) {
+    for (size_t i = 0; i < tb_group->size; i++) {
         if (!strcmp(tb_group->list[i]->type, type)) {
             return i;
         }
@@ -71,7 +71,7 @@ static int not_tb_group(table *tb_group, char *type) {
 }
 
 void free_group(table *data) {
-    for (int i = 0; i < data->size; i++) {
+    for (size_t i = 0; i < data->size; i++) {
         free(data->list[i]->type);
         free(data->list[i]);
     }
