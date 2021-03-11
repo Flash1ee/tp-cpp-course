@@ -197,6 +197,9 @@ TEST(Grouping, group_with_sort_and_integration) {
     ASSERT_EQ(tb_group->list[1]->weight, tb->list[0]->weight * 2);
     ASSERT_EQ(tb_group->list[1]->max_capacity, tb->list[0]->max_capacity * 2);
 
+    output_data(tb);
+    output_data(tb_group);
+
     free_table(tb);
     free_table(tb_group);
 }
