@@ -184,9 +184,6 @@ TEST(Grouping, group_with_sort_and_integration) {
     ASSERT_EQ(rc, EXIT_SUCCESS);
     EXPECT_EQ(tb_group->size, tb->size - 1);
 
-    output_data(tb);
-    output_data(tb_group);
-
     ASSERT_STREQ(tb_group->list[1]->type, tb->list[0]->type);
     ASSERT_EQ(tb_group->list[1]->weight, tb->list[0]->weight * 2);
     ASSERT_EQ(tb_group->list[1]->max_capacity, tb->list[0]->max_capacity * 2);
@@ -194,8 +191,6 @@ TEST(Grouping, group_with_sort_and_integration) {
     ASSERT_STREQ(tb_group->list[0]->type, tb->list[2]->type);
     ASSERT_EQ(tb_group->list[0]->weight, tb->list[2]->weight);
     ASSERT_EQ(tb_group->list[0]->max_capacity, tb->list[2]->max_capacity);
-
-
 
     free_table(tb);
     free_table(tb_group);

@@ -42,8 +42,6 @@ unit_test:
   stage: unit_test
   script:
     - cd build
-    - cmake -DCMAKE_BUILD_TYPE=Debug ..
-    - make
     - ./${UNIT}
   needs: ["build"]
 

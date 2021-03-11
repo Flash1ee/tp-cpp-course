@@ -5,7 +5,7 @@
 
 int group_by_type(table *data, table *tb_group);
 int sort_by_capacity(table *tb_group);
-int cmp(const void *a, const void *b);
+void insert_sort(table *tb);
 int not_tb_group(table *tb_group, char *type);
 void free_group(table *tb_group);
 
