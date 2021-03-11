@@ -5,7 +5,7 @@ before_script:
   - apt-get install --yes cmake
   - apt-get install --yes libgtest-dev
   - git clone https://github.com/linux-test-project/lcov.git
-  - cd lcov && make install
+  - cd lcov && make install && cd ..
   - lcov --version
 
 variables:
