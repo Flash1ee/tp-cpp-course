@@ -5,6 +5,7 @@ before_script:
   - apt-get install --yes cmake
   - apt-get install --yes libgtest-dev
   - apt-get install --yes lcov
+  - lcov --version
 
 variables:
   PROG: main.out
