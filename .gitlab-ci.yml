@@ -54,6 +54,7 @@ test_mem:
 coverage:
   stage: test
   script:
-    - cmake -B ./build -DCMAKE_BUILD_TYPE=Debug
-    - make -C ./build codeCoverage
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Debug ..
+    - make codeCoverage
   needs: ["build"]
