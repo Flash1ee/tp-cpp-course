@@ -13,9 +13,7 @@ variables:
 stages:
   - test_style
   - build
-  - unit_test
-  - test_mem
-  - coverage
+  - test
 
 test_style:
   stage: test_style
@@ -38,7 +36,7 @@ build:
       - "./cmake-modules"
 
 unit_test:
-  stage: unit_test
+  stage: test
   script:
     - cd build
     - ./${UNIT}
@@ -46,14 +44,14 @@ unit_test:
 
 
 test_mem:
-  stage: test_mem
+  stage: test
   script:
     - apt-get update && apt-get install -y valgrind
     - valgrind ./build/${UNIT}
   needs: ["build"]
 
 coverage:
-  stage: coverage
+  stage: test
   script:
     - cmake -B ./build -DCMAKE_BUILD_TYPE=Debug
     - make -C ./build codeCoverage
