@@ -1,10 +1,3 @@
-//
-// Created by flashie on 10.03.2021.
-//
-#include <stdio.h>
-#include <string.h>
-#include <iostream>
-
 #include "gtest/gtest.h"
 
 extern "C" {
@@ -12,6 +5,7 @@ extern "C" {
     #include "grouping.h"
     #include "packing.h"
     #include "retcodes.h"
+    #include <string.h>
 }
 
 TEST(Create, create_table_valid) {
