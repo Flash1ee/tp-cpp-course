@@ -15,6 +15,7 @@ stages:
   - build
   - unit_test
   - test_mem
+  - coverage
 
 test_style:
   stage: test_style
@@ -45,19 +46,17 @@ unit_test:
   needs: ["build"]
 
 
-coverage:
-  stage: unit_test
-  script:
-    - cd build
-    - cmake -DCMAKE_BUILD_TYPE=Debug ..
-    - make codeCoverage
-  needs: ["build", "unit_test"]
-
-
 test_mem:
   stage: test_mem
   script:
     - apt-get update && apt-get install -y valgrind
     - valgrind ./build/${UNIT}
-  needs: ["build", "unit_test"]
+  needs: ["unit_test", "build"]
 
+coverage:
+  stage: coverage
+  script:
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Debug ..
+    - make codeCoverage
+  needs: ["unit_test", "test_mem"]
