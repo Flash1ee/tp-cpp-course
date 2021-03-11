@@ -1,0 +1,61 @@
+image: gcc
+
+before_script:
+  - apt-get update --yes
+  - apt-get install --yes cmake
+  - apt-get install --yes libgtest-dev
+  - apt-get install --yes cppcheck
+
+variables:
+  PROG: main.out
+  UNIT: unit.out
+
+stages:
+  - test_style
+  - build
+  - unit_test
+  - test_mem
+
+test_style:
+  stage: test_style
+  script:
+    - ./cppcheck.sh
+
+build:
+  stage: build
+  script:
+    - mkdir build
+    - cd build
+    - cmake ..
+    - cmake --build .
+  artifacts:
+    paths:
+      - ${PROG}
+
+unit_test:
+  stage: unit_test
+  script:
+    - cd build
+    - ./${UNIT}
+  artifacts:
+    paths:
+      - ${UNIT}
+  needs = ["build"]
+
+
+coverage:
+  stage: unit_test
+  script:
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Debug ..
+    - make codeCoverage
+  needs = ["build"]
+
+
+test_mem:
+  stage: test_mem
+  script:
+    - apt-get update && apt-get install -y valgrind
+    - valgrind ./build/${UNIT}
+  needs = ["build"]
+
