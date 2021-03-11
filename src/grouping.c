@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 #include "grouping.h"
 #include "retcodes.h"
 
@@ -47,7 +48,7 @@ int cmp(const void *a, const void *b) {
     const container *first = a;
     const container *sec = b;
 
-    return first->max_capacity > sec->max_capacity;
+    return first->max_capacity - sec->max_capacity;
 }
 
 int sort_by_capacity(table *tb_group) {
