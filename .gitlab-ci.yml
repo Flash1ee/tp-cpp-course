@@ -48,11 +48,11 @@ test_mem:
   script:
     - apt-get update && apt-get install -y valgrind
     - valgrind ./build/${UNIT}
-  needs: ["build", "unit_test"]
+  needs: ["build"]
 
 coverage:
   stage: test
   script:
     - cmake -B ./build -DCMAKE_BUILD_TYPE=Debug
     - make -C ./build codeCoverage
-  needs: ["build", "unit_test"]
+  needs: ["build"]
