@@ -1,11 +1,11 @@
 #include "gtest/gtest.h"
 
 extern "C" {
+    #include <string.h>
     #include "input.h"
     #include "grouping.h"
     #include "packing.h"
     #include "retcodes.h"
-    #include <string.h>
 }
 
 TEST(Create, create_table_valid) {
@@ -67,12 +67,14 @@ TEST(Grouping, group_data_invalid_arg_first) {
     table* tb = create_table();
     ASSERT_NE(tb, nullptr);
     ASSERT_EQ(group_by_type(nullptr, tb), ARG_ERR);
+    free(tb);
 }
 
 TEST(Grouping, group_data_invalid_arg_second) {
     table* tb = create_table();
     ASSERT_NE(tb, nullptr);
     ASSERT_EQ(group_by_type(tb, nullptr), ARG_ERR);
+    free(tb);
 }
 TEST(Grouping, group_data_one_record) {
     table *tb = create_table();

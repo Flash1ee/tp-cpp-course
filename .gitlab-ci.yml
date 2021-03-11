@@ -59,4 +59,4 @@ coverage:
     - cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug ..
     - make codeCoverage
-  needs: ["unit_test", "test_mem"]
+  needs: ["build""]
