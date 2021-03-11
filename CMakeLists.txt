@@ -12,7 +12,7 @@ setup_target_for_coverage_lcov(
         NAME codeCoverage
         EXECUTABLE unit.out
         BASE_DIRECTORY "${PROJECT_SOURCE_DIR}"
-        EXCLUDE "src/packing.c"
+        EXCLUDE "/usr/*"
 )
 
 
