@@ -5,7 +5,7 @@ set(CMAKE_CC_COMPILER "gcc")
 project(hw_1)
 
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_FLAGS "-Wall -Wextra -g3 -ggdb")
+set(CMAKE_C_FLAGS "-Wall -Wextra -Werror -Wpedantic -g3 -ggdb")
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake-modules")
 include(CodeCoverage)
@@ -20,13 +20,15 @@ setup_target_for_coverage_lcov(
 
 
 include_directories(./inc/)
+file(GLOB SOURCES src/*.c)
+list(REMOVE_ITEM SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c)
 
-add_library(WORK_LIB STATIC src/grouping.c src/input.c src/packing.c)
+add_library(WORK_LIB STATIC "${SOURCES}")
 target_include_directories(WORK_LIB PUBLIC ./inc)
 set_target_properties(WORK_LIB PROPERTIES PUBLIC_HEADER inc/*.h)
 
 set(MAIN src/main.c)
-set(TESTS unit_tests/tests.cpp)
+file(GLOB TESTS unit_tests/*.cpp)
 
 add_executable(main.out ${MAIN})
 target_include_directories(main.out PUBLIC ./inc/)

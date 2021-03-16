@@ -13,10 +13,9 @@ int fill_table(table *data) {
     }
     int count = 0;
     fprintf(stdout, "Input count of records: ");
-    if (fscanf(stdin, "%d", &count) != 1 || count < 1) {
+    if (fscanf(stdin, "%d%*c", &count) != 1 || count < 1) {
         return INPUT_ERR;
     }
-    clean_buf();
     int rc = EXIT_SUCCESS;
 
     rc = init_table(data, count);
@@ -53,17 +52,15 @@ int fill_container(container **dest_ptr) {
     }
     tmp[strlen(tmp) - 1] = '\0';
     fprintf(stdout, "Input weight of container: ");
-    if (fscanf(stdin, "%d", &weight) != 1) {
+    if (fscanf(stdin, "%d%*c", &weight) != 1) {
         free(tmp);
         return INPUT_ERR;
     }
-    clean_buf();
     fprintf(stdout, "Input max_capacity of container: ");
-    if (fscanf(stdin, "%d", &capacity) != 1) {
+    if (fscanf(stdin, "%d%*c", &capacity) != 1) {
         free(tmp);
         return INPUT_ERR;
     }
-    clean_buf();
     *dest_ptr = create_container(tmp, weight, capacity);
     if (!(*dest_ptr)) {
         free(tmp);
@@ -85,7 +82,3 @@ void output_data(table *data) {
     }
 }
 
-void clean_buf() {
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF) {}
-}
