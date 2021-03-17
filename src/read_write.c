@@ -3,11 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "input.h"
+#include "read_write.h"
 #include "packing.h"
 #include "retcodes.h"
 
-int fill_table(table *data) {
+retcodes fill_table(table *data) {
     if (!data) {
         return ARG_ERR;
     }
@@ -16,7 +16,7 @@ int fill_table(table *data) {
     if (fscanf(stdin, "%d%*c", &count) != 1 || count < 1) {
         return INPUT_ERR;
     }
-    int rc = EXIT_SUCCESS;
+    int rc = OK;
 
     rc = init_table(data, count);
     if (rc) {
@@ -32,10 +32,10 @@ int fill_table(table *data) {
     }
     fprintf(stdout, "Successful input data\n");
 
-    return EXIT_SUCCESS;
+    return OK;
 }
 
-int fill_container(container **dest_ptr) {
+retcodes fill_container(container **dest_ptr) {
     if (!dest_ptr) {
         return ARG_ERR;
     }
@@ -67,7 +67,7 @@ int fill_container(container **dest_ptr) {
         return ALLOC_ERR;
     }
 
-    return EXIT_SUCCESS;
+    return OK;
 }
 
 void output_data(table *data) {

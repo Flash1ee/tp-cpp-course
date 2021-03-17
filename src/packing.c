@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include "packing.h"
-#include <retcodes.h>
 
 table *create_table() {
     table *tb = calloc(1, sizeof(table));
@@ -10,7 +9,7 @@ table *create_table() {
     return tb;
 }
 
-int init_table(table *tb, size_t size) {
+retcodes init_table(table *tb, size_t size) {
     if (!tb) {
         return ARG_ERR;
     }
@@ -21,7 +20,7 @@ int init_table(table *tb, size_t size) {
     tb->capacity = size;
     tb->size = 0;
 
-    return EXIT_SUCCESS;
+    return OK;
 }
 
 void free_table(table *data) {

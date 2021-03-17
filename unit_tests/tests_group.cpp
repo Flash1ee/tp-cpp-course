@@ -6,20 +6,20 @@ extern "C" {
 }
 
 TEST(Grouping, group_data_invalid_args) {
-    ASSERT_EQ(group_by_type(nullptr, nullptr), ARG_ERR);
+    ASSERT_EQ(group_by_name(nullptr, nullptr), ARG_ERR);
 }
 
 TEST(Grouping, group_data_invalid_arg_first) {
     table *tb = create_table();
     ASSERT_NE(tb, nullptr);
-    ASSERT_EQ(group_by_type(nullptr, tb), ARG_ERR);
+    ASSERT_EQ(group_by_name(nullptr, tb), ARG_ERR);
     free(tb);
 }
 
 TEST(Grouping, group_data_invalid_arg_second) {
     table *tb = create_table();
     ASSERT_NE(tb, nullptr);
-    ASSERT_EQ(group_by_type(tb, nullptr), ARG_ERR);
+    ASSERT_EQ(group_by_name(tb, nullptr), ARG_ERR);
     free(tb);
 }
 
@@ -40,7 +40,7 @@ TEST(Grouping, group_data_one_record) {
     ASSERT_NE(tb->list[0], nullptr);
     table *tb_group = create_table();
     ASSERT_NE(tb_group, nullptr);
-    rc = group_by_type(tb, tb_group);
+    rc = group_by_name(tb, tb_group);
     ASSERT_EQ(rc, EXIT_SUCCESS);
     EXPECT_EQ(tb_group->size, tb->size);
     ASSERT_STREQ(tb_group->list[0]->type, tb->list[0]->type);
@@ -81,7 +81,7 @@ TEST(Grouping, without_group_data_three_multy) {
 
     table *tb_group = create_table();
     ASSERT_NE(tb_group, nullptr);
-    rc = group_by_type(tb, tb_group);
+    rc = group_by_name(tb, tb_group);
     ASSERT_EQ(rc, EXIT_SUCCESS);
     EXPECT_EQ(tb_group->size, tb->size);
     ASSERT_STREQ(tb_group->list[0]->type, tb->list[0]->type);
@@ -131,7 +131,7 @@ TEST(Grouping, group_with_sort_and_integration) {
 
     table *tb_group = create_table();
     ASSERT_NE(tb_group, nullptr);
-    rc = group_by_type(tb, tb_group);
+    rc = group_by_name(tb, tb_group);
     ASSERT_EQ(rc, EXIT_SUCCESS);
     EXPECT_EQ(tb_group->size, tb->size - 1);
 
@@ -178,7 +178,7 @@ TEST(Grouping, group_with_sort_all_in_one) {
 
     table *tb_group = create_table();
     ASSERT_NE(tb_group, nullptr);
-    rc = group_by_type(tb, tb_group);
+    rc = group_by_name(tb, tb_group);
 
     ASSERT_EQ(rc, EXIT_SUCCESS);
     EXPECT_EQ(tb_group->size, tb->size - 2);

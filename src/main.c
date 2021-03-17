@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "packing.h"
 #include "retcodes.h"
-#include "input.h"
+#include "read_write.h"
 #include "grouping.h"
 
 int main() {
@@ -19,7 +19,7 @@ int main() {
         free_table(data);
         return ALLOC_ERR;
     }
-    rc = group_by_type(data, tb_group);
+    rc = group_by_name(data, tb_group);
     if (rc) {
         free_table(data);
         return rc;

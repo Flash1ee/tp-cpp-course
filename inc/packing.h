@@ -1,6 +1,8 @@
 #ifndef HW_1_PACKING_H
 #define HW_1_PACKING_H
 
+#include "retcodes.h"
+
 typedef struct {
     char *type;
     int weight;
@@ -15,7 +17,7 @@ typedef struct {
 
 table *create_table();
 
-int init_table(table *tb, size_t size);
+retcodes init_table(table *tb, size_t size);
 
 void free_table(table *data);
 

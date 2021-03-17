@@ -2,7 +2,7 @@
 
 extern "C" {
 #include <string.h>
-#include "input.h"
+#include "read_write.h"
 #include "grouping.h"
 #include "packing.h"
 #include "retcodes.h"
