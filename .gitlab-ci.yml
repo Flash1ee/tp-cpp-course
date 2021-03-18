@@ -73,5 +73,5 @@ coverage:
     - cat cover.log
   artifacts:
     paths:
-      - ./${COVER_LOG}
+      - ./build/${COVER_LOG}
   needs: ["build"]
