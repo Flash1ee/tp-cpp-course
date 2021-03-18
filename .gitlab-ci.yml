@@ -12,6 +12,7 @@ variables:
   PROG: main.out
   UNIT: unit.out
   VALGRIND_LOG: "valgrind.log"
+  COVER_LOG: "cover.log"
   NO_LOST_PATTERN: "All heap blocks were freed -- no leaks are possible"
   NO_ERROR_PATTERN: "ERROR SUMMARY: 0 errors"
 
@@ -68,9 +69,9 @@ coverage:
   script:
     - cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug ..
-    - make codeCoverage > cover.log
+    - make codeCoverage > ${COVER_LOG}
     - cat cover.log
   artifacts:
     paths:
-      - "cover.log"
+      - ./${COVER_LOG}
   needs: ["build"]
