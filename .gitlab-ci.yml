@@ -67,8 +67,7 @@ test_mem:
 coverage:
   stage: test
   script:
-    - cd build
-    - cmake -DCMAKE_BUILD_TYPE=Debug ..
+    - cd build && cmake -DCMAKE_BUILD_TYPE=Debug ..
     - make codeCoverage > ${COVER_LOG}
     - cat cover.log
   artifacts:
