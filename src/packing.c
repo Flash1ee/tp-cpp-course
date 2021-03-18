@@ -9,27 +9,29 @@ table *create_table() {
     return tb;
 }
 
-retcodes init_table(table *tb, size_t size) {
+retcodes init_table(table *tb, size_t capacity) {
     if (!tb) {
         return ARG_ERR;
     }
-    tb->list = calloc(size, sizeof(container *));
+    tb->list = calloc(capacity, sizeof(container *));
     if (!tb->list) {
         return ALLOC_ERR;
     }
-    tb->capacity = size;
+    tb->capacity = capacity;
     tb->size = 0;
 
     return OK;
 }
 
 void free_table(table *data) {
-    if (!data) {
+    if (!data || !data->list) {
         return;
     }
-    for (size_t i = 0; i < data->size; i++) {
-        free(data->list[i]->type);
-        free(data->list[i]);
+    for (size_t i = 0; i < data->size; ++i) {
+        if (data->list[i]) {
+            free(data->list[i]->type);
+            free(data->list[i]);
+        }
     }
     free(data->list);
     free(data);
@@ -42,13 +44,14 @@ container *create_container(char *type, int weight, int capacity) {
     container *value = malloc(sizeof(container));
     if (value) {
         value->type = type;
-        value->weight = weight;
-        value->max_capacity = capacity;
+        value->weight = (size_t) weight;
+        value->max_capacity = (size_t) capacity;
     }
     return value;
 }
 void free_container(container *source) {
-    if (source) {
-        free(source);
+    if (!source) {
+        return;
     }
+    free(source);
 }

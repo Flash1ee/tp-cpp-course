@@ -31,14 +31,12 @@ set(MAIN src/main.c)
 file(GLOB TESTS unit_tests/*.cpp)
 
 add_executable(main.out ${MAIN})
-target_include_directories(main.out PUBLIC ./inc/)
 target_link_libraries(main.out WORK_LIB)
 
 enable_testing()
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 add_executable(unit.out ${TESTS})
-target_include_directories(unit.out PUBLIC ./inc/)
 target_link_libraries(unit.out WORK_LIB ${GTEST_LIBRARIES} -lpthread)
 
 

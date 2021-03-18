@@ -1,16 +1,18 @@
-#include <stdlib.h>
-#include "packing.h"
-#include "retcodes.h"
-#include "read_write.h"
+#include <stdio.h>
+
 #include "grouping.h"
+#include "packing.h"
+#include "read_write.h"
+#include "retcodes.h"
+
 
 int main() {
     table *data = create_table();
     if (!data) {
         return ALLOC_ERR;
     }
-    int rc = fill_table(data);
-    if (rc) {
+    retcodes rc = fill_table(data, stdin, stdout);
+    if (rc != OK) {
         free_table(data);
         return rc;
     }
@@ -20,11 +22,11 @@ int main() {
         return ALLOC_ERR;
     }
     rc = group_by_name(data, tb_group);
-    if (rc) {
+    if (rc != OK) {
         free_table(data);
         return rc;
     }
-    output_data(tb_group);
+    output_data(tb_group, stdout);
     free_table(data);
     free_table(tb_group);
 

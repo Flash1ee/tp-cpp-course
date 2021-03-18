@@ -5,8 +5,8 @@
 
 typedef struct {
     char *type;
-    int weight;
-    int max_capacity;
+    size_t weight;
+    size_t max_capacity;
 } container;
 
 typedef struct {
@@ -17,7 +17,7 @@ typedef struct {
 
 table *create_table();
 
-retcodes init_table(table *tb, size_t size);
+retcodes init_table(table *tb, size_t capacity);
 
 void free_table(table *data);
 
