@@ -12,15 +12,14 @@ args_t *init_args() {
 void free_args(args_t *args) {
     if (args) {
         free(args->filename);
-        free(args->dir);
         free(args);
     }
 
 }
+
 void print_args(args_t *args, FILE *out) {
     if (args) {
         fprintf(out, "help : %d\n", args->help);
-        fprintf(out, "directory : %s\n", args->dir);
         fprintf(out, "filename : %s\n", args->filename);
         fprintf(out, "mode : %d\n", args->mode);
     }
@@ -38,24 +37,16 @@ args_t *get_args(int argc, char *argv[]) {
 
     const char *short_opt = "hf:o:";
     struct option long_options[] = {
-            {"help",      no_argument,       NULL, 'h'},
-//            {"directory", required_argument, NULL, 'd'},
-            {"filename",  required_argument, NULL, 'f'},
-            {"option",    required_argument, NULL, 'o'},
-            {NULL, 0,                        NULL, 0}
+            {"help",     no_argument,       NULL, 'h'},
+            {"filename", required_argument, NULL, 'f'},
+            {"option",   required_argument, NULL, 'o'},
+            {NULL, 0,                       NULL, 0}
     };
 
     int opt_ind = 0;
     int rez = 0;
     while ((rez = getopt_long(argc, argv, short_opt, long_options, &opt_ind)) != -1) {
         switch (rez) {
-            case 'd':
-                args->dir = strdup(optarg);
-                if (!args->filename) {
-                    free_args(args);
-                    return NULL;
-                }
-                break;
             case 'f':
                 args->filename = strdup(optarg);
                 if (!args->filename) {

@@ -9,7 +9,6 @@
 
 typedef struct {
     bool help;
-    char *dir;
     char *filename;
     bool mode;
 } args_t;
