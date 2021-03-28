@@ -47,11 +47,29 @@ user_record *create_record(int id, float rating, size_t votes) {
         record->id = id;
         record->votes = votes;
         if (rating < MIN_RATING) {
-            record->rating_nan = 0;
+            record->rating_nan = NAN;
         } else {
             record->rating = rating;
         }
     }
 
     return record;
+}
+retcodes get_count_nan(records_t *records, size_t *count) {
+    if (!records || !records->arr || !count) {
+        return ARG_ERR;
+    }
+    size_t tmp_count = 0;
+
+    for (size_t i = 0; i < records->count; ++i) {
+        if (!records->arr[i]) {
+            return ARG_ERR;
+        }
+        if (records->arr[i]->rating == NAN) {
+            tmp_count++;
+        }
+    }
+    *count = tmp_count;
+
+    return OK;
 }

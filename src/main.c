@@ -50,6 +50,11 @@ int main(int argc, char *argv[]) {
         fclose(f);
         return READ_ERR;
     }
+    size_t count_nan = 0;
+    rc = get_count_nan(records, &count_nan);
+    if (!rc) {
+        printf("COUNT NAN RATING %zu\n", count_nan);
+    }
     fclose(f);
     print_args(args, stdout);
     free_args(args);

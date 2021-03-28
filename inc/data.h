@@ -15,6 +15,7 @@ typedef struct {
 
 #define MIN_RATING 1.0
 #define MAX_RATING 5.0
+#define NAN 0.0
 
 typedef struct {
     user_record **arr;
@@ -27,5 +28,6 @@ void free_records(records_t *records);
 user_record *create_record(int id, float rating, size_t votes);
 retcodes init_records(records_t *records, size_t count);
 retcodes add_record(records_t *records, user_record *data);
+retcodes get_count_nan(records_t *records, size_t *count);
 
 #endif //TP_CPP_COURSE_DATA_H
