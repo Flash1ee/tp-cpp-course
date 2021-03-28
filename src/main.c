@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include "retcodes.h"
 #include "args.h"
-#include "default_worker.h"
+#include "../lib/linear/inc/default_worker.h"
+#include "../lib/parallel//inc/parallel_worker.h"
+
 
 /*
  * --help / -h - необязательно
@@ -21,6 +23,9 @@ void show_help(FILE *out) {
            "--option [mode] (-o) режим запуска: 0 - singleprocessing, 1 - multiprocessing (обязательный)\n");
 }
 
+
+typedef retcodes (*worker)(size_t *count, const args_t *args);
+
 int main(int argc, char *argv[]) {
     if (argc < 2) {
         return ARG_ERR;
@@ -35,11 +40,13 @@ int main(int argc, char *argv[]) {
         return EXIT_SUCCESS;
     }
     size_t res = 0;
-    retcodes (*worker)(size_t *count, const args_t *args) = NULL;
+    worker worker_used = NULL;
     if (args->mode == SINGLE) {
-        worker = default_worker;
+        worker_used = default_worker;
+    } else {
+        worker_used = parallel_worker;
     }
-    int rc = worker(&res, args);
+    int rc = worker_used(&res, args);
     if (rc) {
         free_args(args);
         return rc;
