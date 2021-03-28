@@ -5,7 +5,8 @@ typedef enum {
     OK,
     ARG_ERR,
     READ_ERR,
-    ALLOC_ERR
+    ALLOC_ERR,
+    OPEN_ERR
 } retcodes;
 
 #endif //TP_CPP_COURSE_RETCODES_H

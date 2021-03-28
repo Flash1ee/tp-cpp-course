@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "read_data.h"
 #include "retcodes.h"
 #include "args.h"
+#include "default_worker.h"
 
 /*
  * --help / -h - необязательно
@@ -31,35 +31,22 @@ int main(int argc, char *argv[]) {
     }
     if (args->help) {
         show_help(stdout);
-        return EXIT_FAILURE;
-    }
-    FILE *f = fopen(args->filename, "r");
-    if (!f) {
         free_args(args);
-        return ARG_ERR;
+        return EXIT_SUCCESS;
     }
-    records_t *records = create_records();
-    if (!records) {
+    size_t res = 0;
+    retcodes (*worker)(size_t *count, const args_t *args) = NULL;
+    if (args->mode == SINGLE) {
+        worker = default_worker;
+    }
+    int rc = worker(&res, args);
+    if (rc) {
         free_args(args);
-        fclose(f);
+        return rc;
     }
-    int rc = read_records(f, records);
-    if (rc != OK) {
-        free_records(records);
-        free_args(args);
-        fclose(f);
-        return READ_ERR;
-    }
-    size_t count_nan = 0;
-    rc = get_count_nan(records, &count_nan);
-    if (!rc) {
-        printf("COUNT NAN RATING %zu\n", count_nan);
-    }
-    fclose(f);
-    print_args(args, stdout);
+
+    printf("COUNT NAN RATING %zu\n", res);
     free_args(args);
-    free_records(records);
 
-
-    return 0;
+    return OK;
 }
