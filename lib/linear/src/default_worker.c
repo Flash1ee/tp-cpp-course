@@ -17,16 +17,15 @@ retcodes default_worker(size_t *count, const args_t *args) {
         fclose(f);
         return READ_ERR;
     }
+    fclose(f);
     size_t res = 0;
-    rc = get_count_nan(records, &res);
+    rc = get_count_nan(records->arr, records->size, &res);
     if (rc) {
         free_records(records);
-        fclose(f);
         return rc;
     }
     *count = res;
     free_records(records);
-    fclose(f);
 
     return OK;
 }

@@ -55,21 +55,31 @@ user_record *create_record(int id, float rating, size_t votes) {
 
     return record;
 }
-retcodes get_count_nan(records_t *records, size_t *count) {
-    if (!records || !records->arr || !count) {
+retcodes init_record(user_record *record, int id, size_t votes, float rating) {
+    if (!record) {
+        return ARG_ERR;
+    }
+    record->id = id;
+    record->votes = votes;
+    record->rating = rating;
+
+    return OK;
+}
+retcodes get_count_nan(user_record **records, size_t cnt_records, size_t *cnt_nan) {
+    if (!records || !cnt_nan) {
         return ARG_ERR;
     }
     size_t tmp_count = 0;
 
-    for (size_t i = 0; i < records->count; ++i) {
-        if (!records->arr[i]) {
+    for (size_t i = 0; i < cnt_records; ++i) {
+        if (!records[i]) {
             return ARG_ERR;
         }
-        if (records->arr[i]->rating == NAN) {
+        if (records[i]->rating == NAN) {
             tmp_count++;
         }
     }
-    *count = tmp_count;
+    *cnt_nan = tmp_count;
 
     return OK;
 }
