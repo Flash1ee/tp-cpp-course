@@ -21,6 +21,8 @@ void print_args(args_t *args, FILE *out) {
         fprintf(out, "help : %d\n", args->help);
         fprintf(out, "filename : %s\n", args->filename);
         fprintf(out, "mode : %d\n", args->mode);
+        fprintf(out, "streams : %zu\n", args->streams);
+
     }
 }
 
@@ -34,11 +36,12 @@ args_t *get_args(int argc, char *argv[]) {
         return NULL;
     }
 
-    const char *short_opt = "hf:o:";
+    const char *short_opt = "hf:o:s:";
     struct option long_options[] = {
             {"help",     no_argument,       NULL, 'h'},
             {"filename", required_argument, NULL, 'f'},
             {"option",   required_argument, NULL, 'o'},
+            {"streams",  required_argument, NULL, 's'},
             {NULL, 0,                       NULL, 0}
     };
 
@@ -61,6 +64,14 @@ args_t *get_args(int argc, char *argv[]) {
                 args->mode = mode;
                 break;
             }
+            case 's': {
+                size_t cnt_streams = 0;
+                if (sscanf(optarg, "%zu", &cnt_streams) != 1 || (cnt_streams < 1)) {
+                    args->help = true;
+                }
+                args->streams = cnt_streams;
+                break;
+            }
             case ':':
             case 'h':
             case '?':
@@ -68,7 +79,7 @@ args_t *get_args(int argc, char *argv[]) {
                 break;
         }
     }
-    if (!args->filename || opt_ind < argc / 2) {
+    if (!args->filename || optind < argc) {
         args->help = true;
     }
     return args;

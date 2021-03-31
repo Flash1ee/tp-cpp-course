@@ -22,7 +22,7 @@ setup_target_for_coverage_lcov(
 )
 
 
-set(MAIN src/main.c unit_tests/tests.cpp)
+set(MAIN src/main.c)
 set(INC ./inc/)
 set(LIN_PATH ./lib/linear/)
 set(PRL_PATH ./lib/parallel/)
@@ -57,5 +57,5 @@ enable_testing()
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 add_executable(unit.out ${TESTS})
-target_link_libraries(unit.out WORK_LIB ${GTEST_LIBRARIES} -lpthread)
+target_link_libraries(unit.out ${GTEST_LIBRARIES} data_lib -lpthread)
 

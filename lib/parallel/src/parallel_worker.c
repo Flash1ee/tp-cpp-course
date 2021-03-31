@@ -50,14 +50,10 @@ retcodes parallel_worker(size_t *count, const args_t *args) {
     if (!count || !args || !args->filename || args->mode != PARALLEL) {
         return ARG_ERR;
     }
-#ifndef COUNT_PROCESSES
     long cnt_processes = sysconf(_SC_NPROCESSORS_ONLN);
-    if (cnt_processes == -1) {
-        cnt_processes = DEFAULT_COUNT_PROCESS;
+    if (args->streams) {
+        cnt_processes = args->streams;
     }
-#else
-    long cnt_processes = COUNT_PROCESSES;
-#endif
     FILE *f = fopen(args->filename, "r");
     if (!f) {
         return OPEN_ERR;

@@ -3,7 +3,7 @@ import sys
 if len(sys.argv) != 2:
     exit(1)
 
-n = 10**6
+n = 10**7
 min = 0.1
 max = 5
 data = []

@@ -18,9 +18,9 @@ void show_help(FILE *out) {
            "./main.out [args]\n"
            "Возможные аргументы:\n"
            "--help (-h) Вывод подсказки(необязательный параметр)\n"
-           "--directory [path] (-d) указание пути до директории с обрабатываемым файлом(обязательный параметр)\n"
            "--filename [name] (-f) имя файла (обязательный)\n"
-           "--option [mode] (-o) режим запуска: 0 - singleprocessing, 1 - multiprocessing (обязательный)\n");
+           "--option [mode] (-o) режим запуска: 0 - singleprocessing, 1 - multiprocessing (обязательный)\n"
+           "--streams (-s) указания количество процессов, если options == 0, игнорируется");
 }
 
 

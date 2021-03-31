@@ -42,6 +42,9 @@ retcodes add_record(records_t *records, user_record *data) {
 }
 
 user_record *create_record(int id, float rating, size_t votes) {
+    if (id < 0 || rating < 0.0) {
+        return NULL;
+    }
     user_record *record = calloc(1, sizeof(user_record));
     if (record) {
         record->id = id;
@@ -54,16 +57,6 @@ user_record *create_record(int id, float rating, size_t votes) {
     }
 
     return record;
-}
-retcodes init_record(user_record *record, int id, size_t votes, float rating) {
-    if (!record) {
-        return ARG_ERR;
-    }
-    record->id = id;
-    record->votes = votes;
-    record->rating = rating;
-
-    return OK;
 }
 retcodes get_count_nan(user_record **records, size_t cnt_records, size_t *cnt_nan) {
     if (!records || !cnt_nan) {
