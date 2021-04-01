@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <unistd.h>
 #include "data.h"
 
 records_t *create_records() {
@@ -19,10 +20,20 @@ retcodes init_records(records_t *records, size_t count) {
     if (!records || !count) {
         return ARG_ERR;
     }
-    records->arr = calloc(count, sizeof(user_record *));
-    if (!records->arr) {
-        return ALLOC_ERR;
+    long l1dcls = sysconf(_SC_LEVEL1_DCACHE_LINESIZE);
+    if (l1dcls == -1) {
+        l1dcls = sizeof(void *);
     }
+    user_record **arr = NULL;
+
+    int rc = posix_memalign((void **)&arr, l1dcls, sizeof(user_record *) * count);
+    if (rc != OK) {
+        arr = calloc(count, sizeof(user_record *));
+        if (!arr) {
+            return ALLOC_ERR;
+        }
+    }
+    records->arr = arr;
     records->size = count;
     records->count = 0;
 
