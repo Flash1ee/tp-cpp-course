@@ -15,7 +15,17 @@ if ("${CMAKE_BUILD_TYPE}" MATCHES "Debug")
     append_coverage_compiler_flags()
     setup_target_for_coverage_lcov(
             NAME codeCoverage
-            EXECUTABLE unit_default.out unit_parallel.out unit.out
+            EXECUTABLE unit.out
+            BASE_DIRECTORY "${PROJECT_SOURCE_DIR}"
+            EXCLUDE "/usr/*" "${PROJECT_SOURCE_DIR}/src/main.c" "${PROJECT_SOURCE_DIR}/unit_tests/*.cpp" "${PROJECT_SOURCE_DIR}/lib/*")
+    setup_target_for_coverage_lcov(
+            NAME parallel_coverage
+            EXECUTABLE unit_parallel.out
+            BASE_DIRECTORY "${PROJECT_SOURCE_DIR}"
+            EXCLUDE "/usr/*" "${PROJECT_SOURCE_DIR}/src/main.c" "${PROJECT_SOURCE_DIR}/unit_tests/*.cpp")
+    setup_target_for_coverage_lcov(
+            NAME default_coverage
+            EXECUTABLE unit_default.out
             BASE_DIRECTORY "${PROJECT_SOURCE_DIR}"
             EXCLUDE "/usr/*" "${PROJECT_SOURCE_DIR}/src/main.c" "${PROJECT_SOURCE_DIR}/unit_tests/*.cpp")
 endif ()

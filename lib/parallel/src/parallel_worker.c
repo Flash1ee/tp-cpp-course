@@ -91,7 +91,6 @@ retcodes worker(size_t *count, const args_t *args) {
     if (!count || !args || !args->filename || args->mode != PARALLEL) {
         return ARG_ERR;
     }
-    printf("PARALLEL\n");
     long cnt_processes = sysconf(_SC_NPROCESSORS_ONLN);
     if (args->streams) {
         cnt_processes = args->streams;
