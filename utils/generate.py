@@ -1,9 +1,10 @@
 import random
 import sys
-if len(sys.argv) != 2:
+if len(sys.argv) != 3:
     exit(1)
 
 n = 10**7
+n = int(sys.argv[2])
 min = 0.1
 max = 5
 data = []

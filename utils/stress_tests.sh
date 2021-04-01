@@ -4,43 +4,53 @@ src_file="test.txt"
 
 dst_file_1=out1.txt
 dst_file_2=out2.txt
-dst_file_3=out3.txt
 
 
 pwd=$pwd
 main=$pwd../build/main.out
 process_range=20
+cnt_records=10**7
 
 if [ -z $1 ]; then
-  echo run script with arg - process_range "(./stress_tests N)"
+  echo run script with arg - process_range count - count records in array "(./stress_tests N count)"
   process_range=10
 else
   process_range=$1
 fi
+if [ -z $2 ]; then
+  cnt_records=10000000
+else
+  cnt_records=$2
+fi
 
-echo Count of processes to test [1:$process_range]
+echo STRESS TEST WITH PROCESS RANGE [1:$process_range]
+echo COUNT OF RECORDS $cnt_records
 
 if [ ! -f $src_file ]; then
   echo data file generation
-  python3 $(pwd)/generate.py $src_file
-  echo Done
+  python3 $(pwd)/generate.py $src_file $cnt_records
+  if [ $? -ne 0 ]; then
+    echo ERROR EXECUTE GENERATE DATAFILE
+    exit 1
+  else
+    echo Done
+  fi
 else
   echo data file exist
 fi
 
-
-$main -f $(pwd)/$src_file -o 1 -s 1  > $dst_file_1
-$main -f $(pwd)/$src_file -o 1 -s 2  > $dst_file_2
-$main -f $(pwd)/$src_file -o 1 > $dst_file_3
-
+$main -f $(pwd)/$src_file -o 1 -s 1  > $dst_file_1 && $main -f $(pwd)/$src_file -o 1 -s 2  > $dst_file_2
 echo program done with status $?
 
 diff $dst_file_1 $dst_file_2
-
 if [ $? -eq 0 ];
 then
-    echo program worked equally
+    echo programs worked equally
 fi
+
+echo Linear stress_test
+    /usr/bin/time -f "Exit code: %X \nReal time: %E\nMax Memory Usage(KB): %M" $main -f $(pwd)/$src_file -o 0 > $dst_file_1
+echo
 
 for ((i=1; i < $process_range; i++))
 do
@@ -54,5 +64,6 @@ do
     rm $i
 done
 
-rm $dst_file_1 $dst_file_2 $dst_file_3 $src_file
+rm $dst_file_1 $dst_file_2 $src_file
+exit 0
 
