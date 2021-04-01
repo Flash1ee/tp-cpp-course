@@ -20,20 +20,10 @@ retcodes init_records(records_t *records, size_t count) {
     if (!records || !count) {
         return ARG_ERR;
     }
-    long l1dcls = sysconf(_SC_LEVEL1_DCACHE_LINESIZE);
-    if (l1dcls == -1) {
-        l1dcls = sizeof(void *);
+    records->arr = calloc(count, sizeof(user_record *));
+    if (!records->arr) {
+        return ALLOC_ERR;
     }
-    user_record **arr = NULL;
-
-    int rc = posix_memalign((void **)&arr, l1dcls, sizeof(user_record *) * count);
-    if (rc != OK) {
-        arr = calloc(count, sizeof(user_record *));
-        if (!arr) {
-            return ALLOC_ERR;
-        }
-    }
-    records->arr = arr;
     records->size = count;
     records->count = 0;
 
@@ -56,7 +46,17 @@ user_record *create_record(int id, float rating, size_t votes) {
     if (id < 0 || rating < 0.0) {
         return NULL;
     }
-    user_record *record = calloc(1, sizeof(user_record));
+    long l1dcls = sysconf(_SC_LEVEL1_DCACHE_LINESIZE);
+    if (l1dcls == -1) {
+        l1dcls = sizeof(void *);
+    }
+
+    user_record *record = NULL;
+
+    int rc = posix_memalign((void **)&record, l1dcls, sizeof(user_record));
+    if (rc != OK) {
+        record = calloc(1, sizeof(user_record));
+    }
     if (record) {
         record->id = id;
         record->votes = votes;
