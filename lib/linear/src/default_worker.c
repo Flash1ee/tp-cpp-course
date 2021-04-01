@@ -1,7 +1,11 @@
 #include <stdio.h>
-#include "default_worker.h"
+#include "args.h"
+#include "retcodes.h"
+#include "data.h"
+#include "read_data.h"
+#include "worker.h"
 
-retcodes default_worker(size_t *count, const args_t *args) {
+retcodes worker(size_t *count, const args_t *args) {
     FILE *f = fopen(args->filename, "r");
     if (!f) {
         return OPEN_ERR;

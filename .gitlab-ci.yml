@@ -11,10 +11,16 @@ before_script:
 variables:
   PROG: main.out
   UNIT: unit.out
-  VALGRIND_LOG: "valgrind.log"
+  UNIT_PARALLEL: unit_parallel.out
+  UNIT_DEFAULT: unit_default.out
+
+  VALGRIND_LOG_DATA_LIB: "valgrind_data.log"
+  VALGRIND_LOG_PARALLEL: "valgrind_parallel.log"
+  VALGRIND_LOG_DEFAULT: "valgrind_default.log"
+
   COVER_LOG: "cover.log"
   STRESS_LOG: "stress.log"
-  PROC_RANGE: 5
+  PROC_RANGE: 10
 
   NO_LOST_PATTERN: "All heap blocks were freed -- no leaks are possible"
   NO_ERROR_PATTERN: "ERROR SUMMARY: 0 errors"
@@ -50,19 +56,29 @@ unit_test:
   script:
     - cd build
     - ./${UNIT}
+    - ./${UNIT_DEFAULT}
+    - ./${UNIT_PARALLEL}
   needs: ["build"]
 
 test_mem:
   stage: test
   script:
     - apt-get update && apt-get install -y valgrind
-    - valgrind --tool=memcheck --leak-check=summary --log-file=${VALGRIND_LOG} ./build/${UNIT}
-    - export NO_LOST=$(grep "${NO_LOST_PATTERN}" ${VALGRIND_LOG})
-    - export NO_ERROR=$(grep "${NO_ERROR_PATTERN}" ${VALGRIND_LOG})
+    - valgrind --tool=memcheck --leak-check=summary --log-file=${VALGRIND_LOG_DATA_LIB} ./build/${UNIT}
+    - valgrind --tool=memcheck --leak-check=summary --log-file=${VALGRIND_LOG_PARALLEL} ./build/${UNIT_PARALLEL}
+    - valgrind --tool=memcheck --leak-check=summary --log-file=${VALGRIND_LOG_DEFAULT} ./build/${UNIT_DEFAULT}
+    - export NO_LOST=$(grep "${NO_LOST_PATTERN}" ${VALGRIND_LOG_DATA_LIB})
+    - export NO_LOST=$(grep "${NO_LOST_PATTERN}" ${VALGRIND_LOG_PARALLEL})
+    - export NO_LOST=$(grep "${NO_LOST_PATTERN}" ${VALGRIND_LOG_DEFAULT})
+    - export NO_ERROR=$(grep "${NO_ERROR_PATTERN}" ${VALGRIND_LOG_DATA_LIB})
+    - export NO_ERROR=$(grep "${NO_ERROR_PATTERN}" ${VALGRIND_LOG_PARALLEL})
+    - export NO_ERROR=$(grep "${NO_ERROR_PATTERN}" ${VALGRIND_LOG_DEFAULT})
     - if [ -z "${NO_LOST}" ] || [ -z "${NO_ERROR}" ]; then cat ${VALGRIND_LOG}; exit 1; fi
   artifacts:
     paths:
-      - ./${VALGRIND_LOG}
+      - ./${VALGRIND_LOG_DATA_LIB}
+      - ./${VALGRIND_LOG_DEFAULT}
+      - ./${VALGRIND_LOG_PARALLEL}
   needs: ["build"]
 
 stress_test:

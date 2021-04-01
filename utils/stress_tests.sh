@@ -7,7 +7,9 @@ dst_file_2=out2.txt
 
 
 pwd=$pwd
-main=$pwd../build/main.out
+main_default=$pwd../build/main_default.out
+main_parallel=$pwd../build/main_parallel.out
+
 process_range=20
 cnt_records=10**7
 
@@ -39,7 +41,7 @@ else
   echo data file exist
 fi
 
-$main -f $(pwd)/$src_file -o 1 -s 1  > $dst_file_1 && $main -f $(pwd)/$src_file -o 1 -s 2  > $dst_file_2
+$main_default -f $(pwd)/$src_file -o 0  > $dst_file_1 && $main_default -f $(pwd)/$src_file -o 0  > $dst_file_2
 echo program done with status $?
 
 diff $dst_file_1 $dst_file_2
@@ -49,13 +51,13 @@ then
 fi
 
 echo Linear stress_test
-    /usr/bin/time -f "Exit code: %X \nReal time: %E\nMax Memory Usage(KB): %M" $main -f $(pwd)/$src_file -o 0 > $dst_file_1
+    /usr/bin/time -f "Exit code: %X \nReal time: %E\nMax Memory Usage(KB): %M" $main_default -f $(pwd)/$src_file -o 0 > $dst_file_1
 echo
 
 for ((i=1; i < $process_range; i++))
 do
     echo $i process
-    /usr/bin/time -f "Exit code: %X \nReal time: %E\nMax Memory Usage(KB): %M" $main -f $(pwd)/$src_file -s $i -o 1 > $i
+    /usr/bin/time -f "Exit code: %X \nReal time: %E\nMax Memory Usage(KB): %M" $main_parallel -f $(pwd)/$src_file -s $i -o 1 > $i
     echo
 done
 

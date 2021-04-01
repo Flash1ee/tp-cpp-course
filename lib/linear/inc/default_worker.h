@@ -7,6 +7,6 @@
 #include "read_data.h"
 
 typedef retcodes (*worker)(size_t *count, const args_t *args);
-retcodes default_worker(size_t *count, const args_t *args);
+retcodes worker(size_t *count, const args_t *args);
 
 #endif //IZ2_DEFAULT_WORKER_H

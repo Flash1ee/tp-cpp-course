@@ -2,9 +2,7 @@
 #include <stdlib.h>
 #include "retcodes.h"
 #include "args.h"
-#include "../lib/linear/inc/default_worker.h"
-#include "../lib/parallel//inc/parallel_worker.h"
-
+#include "worker.h"
 
 /*
  * --help / -h - необязательно
@@ -38,13 +36,13 @@ int main(int argc, char *argv[]) {
         return EXIT_SUCCESS;
     }
     size_t res = 0;
-    worker worker_used = NULL;
-    if (args->mode == SINGLE) {
-        worker_used = default_worker;
-    } else {
-        worker_used = parallel_worker;
-    }
-    retcodes rc = worker_used(&res, args);
+//    worker_t worker_usage = worker;
+//    if (args->mode == SINGLE) {
+//        worker_used = default_worker;
+//    } else {
+//        worker_used = parallel_worker;
+//    }
+    retcodes rc = worker(&res, args);
     if (rc != OK) {
         free_args(args);
         return rc;

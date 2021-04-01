@@ -2,7 +2,7 @@
 #include <sys/mman.h>
 #include <string.h>
 #include <wait.h>
-#include "parallel_worker.h"
+#include "worker.h"
 #include "read_data.h"
 
 static void process_terminate(size_t cnt_processes, pid_t *const processes) {
@@ -87,10 +87,11 @@ static retcodes parallel_count_nan(user_record **shared_memory, size_t len, pid_
     return OK;
 }
 
-retcodes parallel_worker(size_t *count, const args_t *args) {
+retcodes worker(size_t *count, const args_t *args) {
     if (!count || !args || !args->filename || args->mode != PARALLEL) {
         return ARG_ERR;
     }
+    printf("PARALLEL\n");
     long cnt_processes = sysconf(_SC_NPROCESSORS_ONLN);
     if (args->streams) {
         cnt_processes = args->streams;

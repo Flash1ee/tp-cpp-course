@@ -43,7 +43,7 @@ retcodes add_record(records_t *records, user_record *data) {
 }
 
 user_record *create_record(int id, float rating, size_t votes) {
-    if (id < 0 || rating < 0.0) {
+    if (id < 0 || rating < NAN) {
         return NULL;
     }
     long l1dcls = sysconf(_SC_LEVEL1_DCACHE_LINESIZE);
@@ -53,10 +53,10 @@ user_record *create_record(int id, float rating, size_t votes) {
 
     user_record *record = NULL;
 
-    int rc = posix_memalign((void **)&record, l1dcls, sizeof(user_record));
-    if (rc != OK) {
+//    int rc = posix_memalign((void **)&record, l1dcls, sizeof(user_record));
+//    if (rc != OK) {
         record = calloc(1, sizeof(user_record));
-    }
+//    }
     if (record) {
         record->id = id;
         record->votes = votes;
