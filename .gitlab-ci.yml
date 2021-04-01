@@ -71,10 +71,11 @@ stress_test:
     - apt-get install time
     - cd utils
     - ./stress_tests.sh ${PROC_RANGE}>${STRESS_LOG} 2>&1
+    - pwd
     - cat ${STRESS_LOG}
   artifacts:
     paths:
-      - ./${STRESS_LOG}
+      - ./utils/${STRESS_LOG}
   needs:
     - job: build
 
