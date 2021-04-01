@@ -68,6 +68,7 @@ test_mem:
 stress_test:
   stage: test
   script:
+    - apt-get install time
     - cd utils
     - ./stress_tests.sh ${PROC_RANGE} > ${STRESS_LOG}
     - cat ${STRESS_LOG}
