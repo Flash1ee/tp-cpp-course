@@ -16,17 +16,6 @@ void free_args(args_t *args) {
 
 }
 
-void print_args(args_t *args, FILE *out) {
-    if (args) {
-        fprintf(out, "help : %d\n", args->help);
-        fprintf(out, "filename : %s\n", args->filename);
-        fprintf(out, "mode : %d\n", args->mode);
-        fprintf(out, "streams : %zu\n", args->streams);
-
-    }
-}
-
-
 args_t *get_args(int argc, char *argv[]) {
     if (argc < 2 || !argv) {
         return NULL;
