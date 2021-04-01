@@ -7,9 +7,6 @@ extern "C" {
 #include "retcodes.h"
 }
 
-
-
-
 TEST(Create, create_record_one_valid) {
     int id = 0;
     size_t votes = 10;
@@ -51,9 +48,9 @@ TEST(Create, create_records_valid) {
     EXPECT_NE(records->arr, nullptr);
 
     user_record *tmp = nullptr;
-    user_record tests[3] = {{0, 10, 1.23},
-                            {1, 20, 1.8},
-                            {2, 5,  4.22}};
+    user_record tests[3] = {{.votes = 10,.rating = 1.23, .id = 0},
+                            {.votes = 20, .rating = 1.8, .id = 1},
+                            {.votes = 5, .rating = 4.22, .id = 2}};
     for (size_t i = 0; i < cnt_records; ++i) {
         tmp = create_record(tests[i].id, tests[i].rating, tests[i].votes);
         EXPECT_NE(tmp, nullptr);
@@ -76,9 +73,9 @@ TEST(Init, init_record_invalid_records) {
 }
 
 TEST(Get, get_count_nan_test) {
-    user_record tests[3] = {{0, 10, 0.8},
-                            {1, 20, 0.7},
-                            {2, 5,  0.2}};
+    user_record tests[3] = {{.votes = 10, .rating = 0.8, .id=0},
+                            {.votes = 20,.rating = 0.7, .id=1},
+                            {.votes = 5,  .rating = 0.2, .id=2}};
     records_t *records = create_records();
     ASSERT_NE(records, nullptr);
     size_t cnt_records = 3;
@@ -115,10 +112,9 @@ TEST(Create, create_records_invalid) {
     EXPECT_EQ(rc, OK);
     EXPECT_EQ(records->size, cnt_records);
     EXPECT_NE(records->arr, nullptr);
-
-    user_record tests[3] = {{0, 10, 1.23},
-                            {1, 20, 1.8},
-                            {2, 5,  4.22}};
+    user_record tests[3] = {{.votes = 10, .rating = 1.23, .id=0},
+                            {.votes = 20,.rating = 1.8, .id=1},
+                            {.votes = 5,  .rating = 4.22, .id=2}};
     user_record *tmp = nullptr;
     for (size_t i = 0; i < cnt_records; ++i) {
         tmp = create_record(tests[i].id, tests[i].rating, tests[i].votes);

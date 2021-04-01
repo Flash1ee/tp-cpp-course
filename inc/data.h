@@ -5,12 +5,12 @@
 #include "retcodes.h"
 
 typedef struct {
-    int id;
     size_t votes;
     union {
         float rating;
         int rating_nan;
     };
+    int id;
 } user_record;
 
 #define MIN_RATING 1.0

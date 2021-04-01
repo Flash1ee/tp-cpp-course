@@ -40,7 +40,7 @@ user_record *read_record(FILE *f) {
     float rating = 0;
     size_t votes = 0;
 
-    if (sscanf(tmp, "%d%zu%f", &id, &votes, &rating) != 3 || id < 0 || rating < 0) {
+    if (sscanf(tmp, "%d%zu%f", &id, &votes, &rating) != 3 || id < 0 || rating < 0 || rating > MAX_RATING) {
         free(tmp);
         return NULL;
     }

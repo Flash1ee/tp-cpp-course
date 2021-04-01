@@ -5,7 +5,7 @@
 #include "parallel_worker.h"
 #include "read_data.h"
 
-static void process_terminate(size_t cnt_processes, pid_t* const processes) {
+static void process_terminate(size_t cnt_processes, pid_t *const processes) {
     for (size_t i = 0; i < cnt_processes; ++i) {
         kill(processes[i], SIGKILL);
     }
@@ -22,7 +22,8 @@ static void process_terminate(size_t cnt_processes, pid_t* const processes) {
         }
     }
 }
-static int exit_processes(size_t cnt_process, pid_t* const processes) {
+
+static int exit_processes(size_t cnt_process, pid_t *const processes) {
     if (!processes) {
         return ARG_ERR;
     }
@@ -37,7 +38,7 @@ static int exit_processes(size_t cnt_process, pid_t* const processes) {
             if (waited_pid) {
                 if (WIFEXITED(status)) {
                     cnt_process--;
-                } else if (WIFSIGNALED(status)|| WIFSTOPPED(status)) {
+                } else if (WIFSIGNALED(status) || WIFSTOPPED(status)) {
                     return WAITPID_ERR;
                 }
             }
@@ -45,7 +46,47 @@ static int exit_processes(size_t cnt_process, pid_t* const processes) {
     }
     return OK;
 }
-#define DEFAULT_COUNT_PROCESS 4
+
+static retcodes parallel_count_nan(user_record **shared_memory, size_t len, pid_t *processes, long cnt_processes) {
+    if (!shared_memory || !processes || cnt_processes < 1) {
+        return ARG_ERR;
+    }
+
+    size_t offset = (len - 1) / cnt_processes + (len - 1) % cnt_processes;
+    pid_t child = 0;
+
+    user_record **shared_offset = shared_memory + 1;
+    len--;
+
+    for (long i = 0; i < cnt_processes; ++i) {
+        child = fork();
+        if (child == -1) {
+            process_terminate(i, processes);
+            return FORK_ERR;
+        } else if (child != 0) {
+            processes[i] = child;
+
+            shared_offset += offset;
+            len -= offset;
+
+            if (len < offset) {
+                offset = len;
+            }
+        } else {
+            size_t count = 0;
+            retcodes rc = get_count_nan(shared_offset, offset, &(count));
+            if (rc != OK) {
+                process_terminate(i, processes);
+                exit(rc);
+            }
+            *(_Atomic size_t *) shared_memory += count;
+            exit(EXIT_SUCCESS);
+        }
+
+    }
+    return OK;
+}
+
 retcodes parallel_worker(size_t *count, const args_t *args) {
     if (!count || !args || !args->filename || args->mode != PARALLEL) {
         return ARG_ERR;
@@ -71,13 +112,13 @@ retcodes parallel_worker(size_t *count, const args_t *args) {
     }
     fclose(f);
     // Отображение массива структур в "общую" память
-    user_record **shared_memory = mmap(NULL, sizeof(user_record*) * (records->count + 1), PROT_READ | PROT_WRITE,
-                               MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    user_record **shared_memory = mmap(NULL, sizeof(user_record *) * (records->count + 1), PROT_READ | PROT_WRITE,
+                                       MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     if (!shared_memory) {
         free_records(records);
         return ALLOC_ERR;
     }
-    memcpy(shared_memory + 1, records->arr, records->count * sizeof(user_record*));
+    memcpy(shared_memory + 1, records->arr, records->count * sizeof(user_record *));
     size_t shared_len = records->count + 1;
     shared_memory[0] = 0;
 
@@ -85,65 +126,24 @@ retcodes parallel_worker(size_t *count, const args_t *args) {
     pid_t *processes = calloc(cnt_processes, sizeof(pid_t));
     if (!processes) {
         free_records(records);
-        munmap(shared_memory, sizeof(user_record*) * (shared_len + 1));
+        munmap(shared_memory, sizeof(user_record *) * (shared_len + 1));
         return ALLOC_ERR;
     }
-    rc = parallel_count_nan(shared_memory, shared_len,  processes, cnt_processes);
+    rc = parallel_count_nan(shared_memory, shared_len, processes, cnt_processes);
     if (rc != OK) {
         free_records(records);
-        munmap(shared_memory, sizeof(user_record*) * (shared_len + 1));
+        munmap(shared_memory, sizeof(user_record *) * (shared_len + 1));
         process_terminate(cnt_processes, processes);
         free(processes);
         return rc;
     }
     rc = exit_processes(cnt_processes, processes);
-    *count = (_Atomic size_t)shared_memory[0];
+    *count = (_Atomic size_t) shared_memory[0];
 
-    munmap(shared_memory, sizeof(user_record*) * (shared_len + 1));
+    munmap(shared_memory, sizeof(user_record *) * (shared_len + 1));
 
     free(processes);
     free_records(records);
 
     return rc;
-}
-retcodes parallel_count_nan(user_record **shared_memory, size_t len, pid_t *processes, long cnt_processes) {
-    if (!shared_memory || !processes || cnt_processes < 1) {
-        return ARG_ERR;
-    }
-
-    size_t offset = (len - 1) / cnt_processes + (len - 1) % cnt_processes;
-    pid_t child = 0;
-
-    user_record **shared_offset = shared_memory + 1;
-    len--;
-
-    for (long i = 0; i < cnt_processes; ++i) {
-        child = fork();
-        if (child == -1) {
-            process_terminate(i, processes);
-            // TODO free all processes
-            return FORK_ERR;
-        } else if (child != 0) {
-            processes[i] = child;
-
-            shared_offset += offset;
-            len -= offset;
-
-            if (len < offset) {
-                offset = len;
-            }
-        } else {
-            size_t count = 0;
-            retcodes rc = get_count_nan(shared_offset, offset, &(count));
-            if (rc != OK) {
-                process_terminate(i, processes);
-                // TODO free all processes
-                exit(rc);
-            }
-            *(_Atomic size_t *)shared_memory += count;
-            exit(EXIT_SUCCESS);
-        }
-
-    }
-    return OK;
 }

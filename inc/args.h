@@ -9,10 +9,10 @@
 #define PARALLEL 1
 
 typedef struct {
-    bool help;
-    char *filename;
-    bool mode;
     size_t streams;
+    char *filename;
+    bool help;
+    bool mode;
 } args_t;
 
 args_t *init_args();

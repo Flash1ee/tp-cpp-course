@@ -7,7 +7,6 @@ typedef enum {
     READ_ERR,
     ALLOC_ERR,
     OPEN_ERR,
-    LOAD_ERR,
     FORK_ERR,
     WAITPID_ERR,
 } retcodes;
