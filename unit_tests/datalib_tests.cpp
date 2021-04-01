@@ -6,9 +6,9 @@ extern "C" {
 #include "read_data.h"
 #include "retcodes.h"
 }
-user_record tests[3] = {{0, 10, 1.23},
-                        {1, 20, 1.8},
-                        {2, 5,  4.22}};
+
+
+
 
 TEST(Create, create_record_one_valid) {
     int id = 0;
@@ -50,6 +50,9 @@ TEST(Create, create_records_valid) {
     EXPECT_NE(records->arr, nullptr);
 
     user_record *tmp = nullptr;
+    user_record tests[3] = {{0, 10, 1.23},
+                            {1, 20, 1.8},
+                            {2, 5,  4.22}};
     for (size_t i = 0; i < cnt_records; ++i) {
         tmp = create_record(tests[i].id, tests[i].rating, tests[i].votes);
         EXPECT_NE(tmp, nullptr);
@@ -112,6 +115,9 @@ TEST(Create, create_records_invalid) {
     EXPECT_EQ(records->size, cnt_records);
     EXPECT_NE(records->arr, nullptr);
 
+    user_record tests[3] = {{0, 10, 1.23},
+                            {1, 20, 1.8},
+                            {2, 5,  4.22}};
     user_record *tmp = nullptr;
     for (size_t i = 0; i < cnt_records; ++i) {
         tmp = create_record(tests[i].id, tests[i].rating, tests[i].votes);

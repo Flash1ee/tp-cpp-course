@@ -24,8 +24,6 @@ void show_help(FILE *out) {
 }
 
 
-typedef retcodes (*worker)(size_t *count, const args_t *args);
-
 int main(int argc, char *argv[]) {
     if (argc < 2) {
         return ARG_ERR;
@@ -46,13 +44,13 @@ int main(int argc, char *argv[]) {
     } else {
         worker_used = parallel_worker;
     }
-    int rc = worker_used(&res, args);
-    if (rc) {
+    retcodes rc = worker_used(&res, args);
+    if (rc != OK) {
         free_args(args);
         return rc;
     }
 
-    printf("COUNT NAN RATING %zu\n", res);
+    printf("%zu\n", res);
     free_args(args);
 
     return OK;

@@ -57,5 +57,5 @@ enable_testing()
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 add_executable(unit.out ${TESTS})
-target_link_libraries(unit.out ${GTEST_LIBRARIES} data_lib -lpthread)
+target_link_libraries(unit.out ${GTEST_LIBRARIES} data_lib single_worker parallel_worker -lpthread)
 

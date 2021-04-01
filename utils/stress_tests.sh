@@ -6,11 +6,13 @@ dst_file_1=out1.txt
 dst_file_2=out2.txt
 dst_file_3=out3.txt
 
+
 pwd=$pwd
 main=$pwd../cmake-build-debug/main.out
 process_range=20
 
 if [ -z $1 ]; then
+  echo run script with arg - process_range "(./stress_tests N)"
   process_range=10
 else
   process_range=$1
@@ -33,7 +35,7 @@ $main -f $(pwd)/$src_file -o 1 > $dst_file_3
 
 echo program done with status $?
 
-diff temp_out_1 temp_out_2
+diff $dst_file_1 $dst_file_2
 
 if [ $? -eq 0 ];
 then
@@ -43,14 +45,14 @@ fi
 for ((i=1; i < $process_range; i++))
 do
     echo $i process
-    /usr/bin/time -f "Time %E" $main -f $(pwd)/$src_file -s $i -o 1 > $dst_file_$i
+    /usr/bin/time -f "Exit code: %X \nReal time: %E\nMax Memory Usage(KB): %M" $main -f $(pwd)/$src_file -s $i -o 1 > $i
     echo
 done
 
-for ((i=1; i < $process_range; i++))
+for (( i=1; i < $process_range; i++ ))
 do
-    rm $dst_file_$i
+    rm $i
 done
 
-rm $src_file
+rm $dst_file_1 $dst_file_2 $dst_file_3 $src_file
 
