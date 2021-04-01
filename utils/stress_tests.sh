@@ -8,7 +8,7 @@ dst_file_3=out3.txt
 
 
 pwd=$pwd
-main=$pwd../cmake-build-debug/main.out
+main=$pwd../build/main.out
 process_range=20
 
 if [ -z $1 ]; then

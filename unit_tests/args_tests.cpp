@@ -7,6 +7,7 @@ extern "C" {
 TEST(Args, init_args_test) {
     args_t *args = init_args();
     EXPECT_NE(args, nullptr);
+    free(args);
 }
 
 TEST(Args, get_args_invalid_count) {

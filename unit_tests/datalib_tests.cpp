@@ -20,6 +20,7 @@ TEST(Create, create_record_one_valid) {
     EXPECT_EQ(record->id, id);
     EXPECT_EQ(record->votes, votes);
     EXPECT_EQ(record->rating_nan, NAN);
+    free(record);
 }
 
 TEST(Create, create_record_one_invalid_id) {
