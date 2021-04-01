@@ -100,6 +100,8 @@ coverage:
   script:
     - cd build && cmake -DCMAKE_BUILD_TYPE=Debug ..
     - make codeCoverage > ${COVER_LOG}
+    - make default_coverage >> ${COVER_LOG}
+    - make parallel_coverage >> ${COVER_LOG}
     - cat cover.log
   artifacts:
     paths:
