@@ -13,6 +13,9 @@ variables:
   UNIT: unit.out
   VALGRIND_LOG: "valgrind.log"
   COVER_LOG: "cover.log"
+  STRESS_LOG: "stress.log"
+  PROC_RANGE: 5
+
   NO_LOST_PATTERN: "All heap blocks were freed -- no leaks are possible"
   NO_ERROR_PATTERN: "ERROR SUMMARY: 0 errors"
 
@@ -48,6 +51,16 @@ unit_test:
     - cd build
     - ./${UNIT}
   needs: ["build"]
+
+stress_test:
+  stage:test
+  script:
+    - cd utils
+    - ./stress_tests.sh ${PROC_RANGE} > ${STRESS_LOG}
+    - cat ${STRESS_LOG}
+  artifacts:
+    paths:
+      -./${STRESS_LOG}
 
 
 test_mem:
