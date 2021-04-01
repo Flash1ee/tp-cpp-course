@@ -74,6 +74,6 @@ target_include_directories(unit_default.out PUBLIC ${INC} ${UNIT})
 target_link_libraries(unit_default.out ${GTEST_LIBRARIES} data_lib single_worker pthread gtest)
 
 add_executable(unit_parallel.out ${TESTS_PRL} ${UNIT}/tests.cpp)
-target_include_directories(unit_parallel.out PUBLIC ${INC} ${UNIT} ${UNIT}/tests.cpp)
+target_include_directories(unit_parallel.out PUBLIC ${INC} ${UNIT})
 target_link_libraries(unit_parallel.out ${GTEST_LIBRARIES} data_lib parallel_worker -lpthread pthread gtest)
 

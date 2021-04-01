@@ -1,4 +1,4 @@
-#include "../fixtures_tests.hpp"
+#include "fixtures_tests.hpp"
 #include <gtest/gtest.h>
 
 extern "C" {
